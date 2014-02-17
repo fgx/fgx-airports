@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang=en>
+<head>
+<title>XML to FSM</title>
+<meta charset=utf-8>
+<meta name=author content='Theo Armour'>
+</head>
+<body>
+<script>
+// files with issues KCMH
+	document.body.style.cssText = ' font: bold 12pt monospace; ';
+	var info = document.body.appendChild( document.createElement( 'div' ) );
+	info.innerHTML = '<h1>XML to FSM</h1>';
+
+// '<textarea id=txtItem cols=25 rows=5>bits</textarea>' +
+	var textLeft = document.body.appendChild( document.createElement( 'textarea' ) );
+	textLeft.style.cssText = 'height: 600px; left: 5%; width: 40%; '; // style takes precedence over properties
+	textLeft.value = 'textLefy\n';
+
+
+	var textRight = document.body.appendChild( document.createElement( 'textarea' ) );
+	textRight.style.cssText = 'height: 600px; left: 55%; width: 40%; '; // style takes precedence over properties
+	textRight.value = 'textRight\n';
+
+	var dir = '../../LDS767_AIO_Individual_XML_Airports/';
+	var text = requestFile( dir + 'APlist.txt' );
+	var lines = text.split(/\r\n|\n/);
+	var length = lines.length - 1;
+	var apList = [];
+	for ( var i = 2; i < length; i++ ) {
+		apList.push( dir + lines[i] + '.xml\n' );
+	}
+
+	textLeft.value = apList;
+
+	var ap, apData;
+	var txt = '', n = '\n', thing;
+	var txtLeft = '';
+
+	var sidParams = [ 'Name', 'Type','Latitude','Longitude','Speed','Altitude','AltitudeCons','AltitudeRestriction',
+		'Hdg_Crs','Hdg_Crs_value','Sp_Turn', 'DMEtoIntercept','Hld_td_value'];
+
+	for (var i = 0, iLen = apList.length; i < iLen; i++) {
+		txt = '\n\n';
+		ap = requestFile( apList[i] );
+
+		textLeft.value = ap;
+
+		lines = ap.split(/\r\n|\n/);
+		apData= [];
+		for ( var j = 1, jLen = lines.length; j < jLen; j++ ) {
+			apData.push( lines[j] );
+		}
+
+		line = apData.shift();
+
+		if ( line.match( /xml/ ) ) {
+// 			console.log( 'xml', line );
+			line = apData.shift();
+		}
+		var icao;
+		var startLength = apData.length; 
+
+		if ( line.match( /<Airport/ ) ) {
+			thing = line.match( /ICAOcode=\"(.*?)\">/ );
+			icao = thing[1];
+			txtLeft += thing[1] + n;
+			txt += thing[1] + n;
+		} else {
+console.log( line );
+		}
+
+		var done = false;
+		while ( !done ) {
+			line = apData.shift();
+			if ( apData.length < 1 ) {
+				// console.log( apData );
+				break;
+			}  
+
+
+			if ( line.match( /<Sid / ) ) {
+				thing = line.match( /Name=\"(.*?)\" Runways/ );
+				txt += 'Sid: Name: ' + thing[1] +'; ';
+
+				thing = line.match( /Runways=\"(.*?)\"/ );
+				txt += 'Runways: ' + thing[1] + '\n';
+
+			} else if ( line.match( /<Sid_Waypoint/ ) ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'Sid Waypoint ID: ' + thing[1] + n;
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						// txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else if ( line.match( /<Sid_Transition / ) ) {
+
+				thing = line.match( /Name=\"(.*?)\">/ );
+				//if ( thing ) {
+					txt += 'Sid_Transition: Name:' + thing[1] + n;
+				//} else {
+// txt += 'errorrrrrrrrrrrrrrrrrrrrrrrrrr: ' + line + n + n + n ;
+				//}
+
+			} else if ( line.match( /<SidTr_Waypoint / ) ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'SidTr_Waypoint: ID: ' + thing[1] + n;
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						//txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+
+			} else  if ( line.match( /Star / ) ) {
+				thing = line.match( /Name=\"(.*?)\">/ );
+				txt += 'Star: Name:' + thing[1] + n;
+
+			} else  if ( line.match( /<Star_Waypoint/ )  ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'Star_Waypoint ID:' + thing[1] + n;
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						//txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else  if ( line.match( /<Star_Transition/ )  ) {
+				thing = line.match( /Name=\"(.*?)\">/ );
+if ( !thing ) txtLeft += line + n + icao + ' ' + ( startLength - apData.length + 2)  + n;
+				txt += 'Star_Transition: Name:' + thing[1] + n;
+
+			} else if ( line.match( /StarTr_Waypoint/ )  ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				// txt += 'StarTr_Waypoint: ID:' + thing[1] + n;
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						// txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else  if ( line.match( /<Approach / ) ) {
+				thing = line.match( /Name=\"(.*?)\">/ );
+				txt += 'Approach: Name:' + thing[1] +'\n';
+
+			} else  if ( line.match( /<App_Waypoint/ )  ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'App_Waypoint: Name:' + thing[1] +'\n';
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						//txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else  if ( line.match( /<App_Transition / ) ) {
+				thing = line.match( /Name=\"(.*?)\">/ );
+				txt += 'App_Transition: Name:' + thing[1] +'\n';
+
+			} else  if ( line.match( /<AppTr_Waypoint/ )  ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'AppTr_Waypoint ID:' + thing[1] +'\n';
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						//txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else  if ( line.match( /<RunwayTransition / ) ) {
+				thing = line.match( /Runway=\"(.*?)\">/ );
+				txt += 'RunwayTransition : Runway:' + thing[1] +'\n';
+
+			} else  if ( line.match( /<RwyTr_Waypoint/ )  ) {
+				thing = line.match( /ID=\"(.*?)\">/ );
+				txt += 'RwyTr_Waypoint ID:' + thing[1] +'\n';
+
+				for ( var j = 0, jLen = sidParams.length; j < jLen; j++ ) {
+					line = apData.shift();
+					thing = line.match( />(.*?)<\// );
+
+					if ( thing ) {
+						//txt += sidParams[j] + ':' + thing[1] + '; ';
+					} else {
+						//txt += 'stopped : ' + line + n + n;
+						break;
+					}
+				}
+
+			} else if ( line.match( /<\/Airport/ ) || line.match( /<\/Procedures/ )  || line.match( /<\/Sid/ ) || line.match( /<\/App/ ) || 
+					line.match( /<\/Runway/ )  || line.match( /<\/Star/ )  ||
+					line.length < 1 || line.match( /xml/ ) 
+				) {
+
+			} else {
+				txtLeft += '>> ' + icao + ' ' + ( startLength - apData.length + 2)  + n;
+			}
+			if (line === '</ProceduresDB>' ) done = true;
+		}
+
+		textLeft.value = txtLeft;
+		textRight.value += txt + n;
+
+	}
+
+	function requestFile( fname ) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( 'GET', fname, false );
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+
+</script>
+</body>
+</html>
