@@ -40,7 +40,8 @@
 	var sidParams = [ 'Name', 'Type','Latitude','Longitude','Speed','Altitude','AltitudeCons','AltitudeRestriction',
 		'Hdg_Crs','Hdg_Crs_value','Sp_Turn', 'DMEtoIntercept','Hld_td_value'];
 
-	for (var i = 0, iLen = apList.length; i < iLen; i++) {
+// set to iLen for full run
+	for (var i = 0, iLen = apList.length; i < 100; i++) {
 		txt = '\n\n';
 		ap = requestFile( apList[i] );
 
