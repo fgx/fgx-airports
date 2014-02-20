@@ -14,7 +14,7 @@ _FGx NavData Viewer in iFrame window_
 
 ## Concept
 
-Read FGx NavData dat coming in as JSON files, display the content, parse it and show results in 3D
+Read [FGx NavData]( http://navdata.fgx.ch ) data coming in as JSON files, display the content, parse it and show results in 3D
 
 
 ## Features
