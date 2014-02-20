@@ -44,6 +44,12 @@ FGx home page: [fgx.ch]( http://www.fgx.ch )
 
 This app is at an early and volatile stage. Not all licensing requirements may have been fully met let alone identified. It is the intension of the authors to play fair and all such requirements will either be met or the feature in question will turned off.
 
+Data is courtesy of Robin Peel, Seattle, Washington, and xplane:  
+
+[ X-Plane Airport & Navigation Data]( http://data.x-plane.com/index.html )
+
+
+
 
 ## Change Log
 
