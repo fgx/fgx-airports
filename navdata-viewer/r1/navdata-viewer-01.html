@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang=en>
+<head>
+<title>NavData Viewer</title>
+<meta charset=utf-8>
+<meta name=author content='Theo Armour'>
+</head>
+<body>
+<script>
+	var txtLeft, txtRight, places, place;
+
+	var startPlace = 1105;
+	var  n = '\n';
+
+	init();
+
+	function init() {
+
+		document.body.style.cssText = ' font: bold 12pt monospace; ';
+
+		var info = document.body.appendChild( document.createElement( 'div' ) );
+		info.innerHTML = '<h1 style=margin:0; >NavData Viewer</h1>' +
+			'<div>' +
+				'<select id=selPlace ></select> ' +
+				'<a href=JavaScript:checkAll(); >Check All</a>' +
+			'</div>' +
+		'<br>';;
+
+		txtLeft = document.body.appendChild( document.createElement( 'textarea' ) );
+		txtLeft.style.cssText = 'height: ' + (window.innerHeight - 150) + 'px; width: 45%; ';
+
+		txtRight = document.body.appendChild( document.createElement( 'textarea' ) );
+		txtRight.style.cssText = 'height: ' + (window.innerHeight - 150) + 'px; margin-left: 100px; width: 45%; ';
+
+		var icaoFileName = '../apt1000-icao.csv';
+
+		var data = requestFile( icaoFileName );
+		var lines = data.split(/\r\n|\n/);
+
+		for ( var i = 1, length = lines.length - 1; i < length; i++ ) {
+			pl = lines[i].split( ',' ) ;
+			if ( pl[5] !== '0' ) {
+				// ilsGazetteer.push( pl );
+				selPlace.appendChild( document.createElement( 'option' ) );
+				selPlace.children[ selPlace.children.length - 1 ].text = pl[0];
+				selPlace.children[ selPlace.children.length - 1 ].title = pl[1];
+				selPlace.children[ selPlace.children.length - 1 ].lat = parseFloat( pl[2] );
+				selPlace.children[ selPlace.children.length - 1 ].lon = parseFloat( pl[2] );
+			}
+		}
+
+		selPlace.onchange = getNavdata;
+		selPlace.selectedIndex = startPlace;
+		getNavdata();
+	}
+
+	function getNavdata() {
+		var navdata = requestFile( 'http://navdata.fgx.ch/airport/' + selPlace.value + '.json' );
+		txtLeft.value = navdata;
+		place = JSON.parse( navdata );
+console.log( place );
+		var apps, stars;
+
+		if ( place.airport ) {
+			txtRight.value = place.airport.name + n;
+		}
+
+		if ( place.approach ) {
+			apps = place.approach;
+			for ( var appName in apps ) {
+				var app = apps[ appName ];
+				txtRight.value += 'Approach: ' + app.name + n;
+				txtRight.value += findWaypoints( app.waypoints );
+			}
+		}
+
+		if ( place.star ) {
+			stars = place.star;
+			for ( var starName in stars ) {
+				var star = stars[ starName ];
+				txtRight.value += 'Star: ' + star.name + n;
+				txtRight.value += findWaypoints( star.waypoints );
+			}
+		}
+	}
+
+	function findWaypoints( wps ) {
+		var wp, txt = '';
+		for ( var i = 0; len = wps.length; i < len; i++ ) {
+			wp = wps[i];
+			txt += 'waypoint: ' + i + ' lat: ' + wp.latitude  + ' lon: ' + wp.longitude + ' alt: ' + wp.altitude + ' res; ' + wp.altituderestriction + n;
+		}
+		return txt;
+	}
+
+	function checkAll() {
+		places = selPlace.children;
+		var navdata;
+		txtLeft.value = '';
+
+		for (var i = 0, len = places.length; i < len; i++) {
+			place = places[i].value;
+console.log( i, place );
+			navdata = requestFile( 'http://navdata.fgx.ch/airport/' + place + '.json' );
+
+			if ( navdata ) {
+				txtLeft.value += place + n;
+			} else {
+				txtLeft.value += 'oops; ' + place + n;
+			}
+			setTimeout(function(){ console.log( i ); },200);
+		}
+	}
+
+	function requestFile( fname ) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( 'GET', fname, false );
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+
+</script>
+</body>
+</html>
