@@ -3,14 +3,27 @@ FGx Airports Read Me
 
 
 Live demos  
-[FSM Viewer R0.1]( http://fgx.github.io/fgx-airports/fsm-viewer/r1/fsm-viewer.html )
+<iframe src="http://fgx.github.io/fgx-airports/navdata-viewer/latest/" width=100% height=500px class='overview' >
+There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
+</iframe>  
+_FGx NavData Viewer iFrame view_
+
+[FGx NavData Viewer]( http://fgx.github.io/fgx-airports/navdata-viewer/latest/ )  
+[FGx NavData Viewer Read Me]( http://fgx.github.io/fgx-airports/navdata-viewer/ )
+
+<hr>
+<br>
+<iframe src="http://fgx.github.io/fgx-airports/fsm-viewer/r1/fsm-viewer.html" width=100% height=500px class='overview' >
+There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
+</iframe>   
+_FSM Viewer iframe view_
+
+[FSM Viewer R0.1]( http://fgx.github.io/fgx-airports/fsm-viewer/r1/fsm-viewer.html )  
+[FSM Viewer Read Me ]( http://fgx.github.io/fgx-airports/fsm-viewer/ )  
 
 [XML to FSM R1]( http://fgx.github.io/fgx-airports/xml-to-fsm/r1/xml-to-fsm.html )  
 [XML to FSM Light R1]( http://fgx.github.io/fgx-airports/xml-to-fsm/r1/xml-to-fsm-light.html )
 
-<iframe src="http://fgx.github.io/fgx-airports/fsm-viewer/r1/fsm-viewer.html" width=100% height=500px class='overview' >
-There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
-</iframe>
 
 
 
