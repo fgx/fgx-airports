@@ -18,7 +18,7 @@ There is an `iframe` here. It is not visible when viewed on github.com/fgx. To v
 </iframe>   
 _FSM Viewer iframe view_
 
-[FSM Viewer R0.1]( http://fgx.github.io/fgx-airports/fsm-viewer/r1/fsm-viewer.html )  
+[FSM Viewer]( http://fgx.github.io/fgx-airports/fsm-viewer/latest/ )  
 [FSM Viewer Read Me ]( http://fgx.github.io/fgx-airports/fsm-viewer/ )  
 
 [XML to FSM R1]( http://fgx.github.io/fgx-airports/xml-to-fsm/r1/xml-to-fsm.html )  
@@ -45,8 +45,8 @@ Draw the ponts with no altitude as particles
 
 You have two ways of viewing the FGx files:
 
-* Code hosted on GitHub: [fgx.github.io]( http://fgx.github.io/fgx-/ "view the files as apps." ) <input value="<< You are now probably here." size=28 style="font:bold 12pt monospace;border-width:0;" >  
-* Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-/ "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
+* Code hosted on GitHub: [fgx.github.io]( http://fgx.github.io/fgx-airports/ "view the files as apps." ) <input value="<< You are now probably here." size=28 style="font:bold 12pt monospace;border-width:0;" >  
+* Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-airports/ "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
 
 FGx home page: [fgx.ch]( http://www.fgx.ch )
 

@@ -1,4 +1,4 @@
-[FGx](../../index.html ) &raquo; [Repo]( ../index.html ) &raquo; [App]( ./index.html )
+[FGx](../../index.html ) &raquo; [Airports]( ../index.html ) &raquo; [NavData Viewer]( ./index.html )
 ================================================================================================
 
 <p id=rm >
@@ -18,5 +18,5 @@
 
 ****
 
-[Source Code on GitHub]( https://github.com/fgx/fgx.github.io )  
+[Source Code on GitHub]( https://github.com/fgx/fgx-airports/tree/gh-pages/navdata-viewer )  
 [Copyright and License]( https://github.com/fgx/fgx.github.io/blob/master/fgx-copyright-notice-and-license.md )

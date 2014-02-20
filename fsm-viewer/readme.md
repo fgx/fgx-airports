@@ -29,7 +29,7 @@ _FSM Viewer iframe view_
 You have two ways of viewing the FGx files:
 
 * Code hosted on GitHub: [fgx.github.io]( http://fgx.github.io/fgx-airports/fsm-viewer/ "view the files as apps." ) <input value="<< You are now probably here." size=28 style="font:bold 12pt monospace;border-width:0;" >  
-* Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-airports/ "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
+* Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-airports/tree/gh-pages/fsm-viewer "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
 
 FGx home page: [fgx.ch]( http://www.fgx.ch )
 
