@@ -113,8 +113,6 @@
 		initMap();
 	}
 
-var offset
-
 	function initMap() {
 		place = gazetteer[ selPlace.selectedIndex ];
 		lat = place[1]
@@ -140,51 +138,58 @@ var offset
 				mesh = new THREE.Mesh( geometry, material );
 				mesh.position.set( i * tileWidth + offset + 0.5 * tileWidth, 0, j * tileWidth + offset + 0.5 * tileWidth );
 				terrain.add( mesh );
+				mesh = getTileNavData( xTile + i - start, yTile + j - start ); 
+				mesh.position.set( i * tileWidth , 0, j * tileWidth + offset );
+				terrain.add( mesh );
 			}
 		}
 		scene.add( terrain );
-
-		getNavdata();
 	}
 
-	function getNavdata() {
-		ulLat = tile2lat( yTile, zoom);
-//		lrLat = tile2lat( yTile + 1, zoom);
+	function getTileNavData( xT, yT) {
+		var tile = new THREE.Object3D();
 
-		ulLon = tile2lon( xTile, zoom );
-		lrLon = tile2lon( xTile + 1, zoom );
+		ulLat = tile2lat( yT, zoom);
+		lrLat = tile2lat( yT + 1, zoom);
 
-		lrLatT = tile2lat( yTile + tilesPerSide, zoom );
+		ulLon = tile2lon( xT, zoom );
+		lrLon = tile2lon( xT + 1, zoom );
 
-		lrLonT = tile2lon( xTile + tilesPerSide, zoom );
-
-		deltaLat = Math.abs( tile2lat( yTile, zoom ) - tile2lat( yTile + 1, zoom ));
-		deltaLon = Math.abs( tile2lon( xTile, zoom ) - tile2lon( xTile + 1, zoom ))
+		deltaLat = Math.abs( tile2lat( yT, zoom ) - tile2lat( yT + 1, zoom ));
+		deltaLon = Math.abs( tile2lon( xT, zoom ) - tile2lon( xT + 1, zoom ))
 
 		xScale = tileWidth / deltaLon;
 		zScale = tileWidth / deltaLat;
 // console.log( 'Tile ', xTile, yTile,'\nlat ' + ulLat, lrLat, '\nlon ' + ulLon, lrLon,  "\nScale " + xScale,zScale,'\nDeltas ' + deltaLat, deltaLon );
 
-		var mesh = drawObject( ulLat, ulLon, 10.5, 20);
+		var mesh = drawObject( ulLat, ulLon, 10.5 );
 		mesh.scale.set( 80, 20, 80 );
+		tile.add( mesh );
 
-		var mesh = drawObject( lrLatT, lrLonT, 10.5, 20);
+		var mesh = drawObject( lrLat, lrLon, 10.5 );
 		mesh.scale.set( 80, 20, 80 );
+		tile.add( mesh );
 
-		txt = 'ulLat: ' + ulLat + ' > ' + lat + ' > ' + ' lrLat: ' + lrLatT + '\nulLon: ' + ulLon + ' < ' + lon + ' < ' + ' lrLon: ' + lrLonT + '\n';
+		txt = 'ulLat: ' + ulLat + ' > ' + lat + ' > ' + ' lrLat: ' + lrLat + '\nulLon: ' + ulLon + ' < ' + lon + ' < ' + ' lrLon: ' + lrLon + '\n';
 
-		mesh = drawObject( lat, lon, 10 );
-		mesh.scale.set( 30, 200, 30 );
+		if ( ulLat > lat && lat > lrLat && ulLon < lon && lon < lrLon ) {
+			mesh = drawObject( lat, lon, 10 );
+			mesh.scale.set( 30, 200, 30 );
+			tile.add( mesh );
+		}
 
 		for (var i = 0, len = airports.length; i < len; i++) {
 			ap = airports[i];
-			if ( ulLat > ap.lat && ap.lat > lrLatT && ulLon < ap.lon && ap.lon < lrLonT ) {
+			if ( ulLat > ap.lat && ap.lat > lrLat && ulLon < ap.lon && ap.lon < lrLon ) {
 //				txt += ap.ident + ' ' + ap.name + ' ' + ap.lat + ' ' + ap.lon + ' ' + ap.elev_m + '\n';
 				mesh = drawSprite( ap.ident, ap.lat, ap.lon, 10 + 0.15 * ap.elev_m  );
-				mesh = drawLine( [ getPoint( ap.lat, ap.lon, 0 ), getPoint( ap.lat, ap.lon, 10 + 0.15 * ap.elev_m ) ], 0x000000 );
+				tile.add( mesh );
+				mesh = drawLine( [ [ap.lat, ap.lon, 0 ], [ ap.lat, ap.lon, 10 + 0.15 * ap.elev_m ] ], 0x000000 );
+				tile.add( mesh );
 			}
 		}
 		txtRight.value = txt;
+		return tile;
 	}
 
 	function drawObject( latO, lonO, alt ) {
@@ -192,40 +197,35 @@ var offset
 		var material = new THREE.MeshNormalMaterial();
 		var mesh = new THREE.Mesh( geometry, material );
 		mesh.position = getPoint( latO, lonO, alt ) ;
-		terrain.add( mesh );
 		return mesh;
 	}
 
 	function drawSprite( text, latS, lonS, alt ) {
 		texture = canvasText( text )
 		var spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, opacity: 1 } );
-		sprite = new THREE.Sprite( spriteMaterial );
+		var sprite = new THREE.Sprite( spriteMaterial );
 		sprite.position = getPoint( latS, lonS, alt ) ;
 		sprite.scale.set( texture.image.width, texture.image.height );
-		terrain.add( sprite );
 		return sprite;
+	}
+
+	function drawLine( vertices, color) {
+		function convert( element ) {
+			return getPoint( element[0], element[1], element[2] );
+		}
+
+		var geometry = new THREE.Geometry();
+		geometry.vertices = vertices.map( convert );
+		var material = new THREE.LineBasicMaterial( { color: color, linewidth: 5 } );
+		var line = new THREE.Line( geometry, material );
+		return line;
 	}
 
 	function getPoint( latP, lonP, alt ) {
 		var x = xScale * ( lonP - lrLon);
 		var y = alt;
-
-		var tile = lat2tile( latP, zoom )
-		var ulLatP = tile2lat( tile, zoom )
-		deltaLat = Math.abs( ulLatP - tile2lat( tile + 1, zoom ));
-		zScale = tileWidth / deltaLat;
-		var z = zScale * ( ulLatP - latP );
-		var extra =  (yTile - tile) * tileWidth
-		return v( x + offset + tileWidth, y, z + offset - extra);
-	}
-
-	function drawLine( verts, color) {
-		var geometry = new THREE.Geometry();
-		geometry.vertices = verts;
-		var material = new THREE.LineBasicMaterial( { color: color, linewidth: 5 } );
-		var line = new THREE.Line( geometry, material );
-		terrain.add( line );
-		return line;
+		var z = zScale * ( ulLat - latP );
+		return v( x, y, z);
 	}
 
 	function canvasText( text ) {
