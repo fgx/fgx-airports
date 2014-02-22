@@ -1,5 +1,5 @@
 NavData View All Read Me
-=======
+========================
 
 ### Live Demo
 <iframe src="http://fgx.github.io/fgx-aiports/navdata-view-all/latest/index.html" width=100% height=500px class='overview' >
@@ -9,16 +9,28 @@ There is an `iframe` here. It is not visible when viewed on github.com/fgx. To v
 
 
 ## Concept
-Be able to view all of Pete's NaData all in one place all at the same time
+Be able to view all of Pete's NaData all in one place all at the same time.
+
+See if yoo can get to zoom level 1 and rotate the earth.
+
 
 ## Features
 
+* View 12K+ items
+* The app shows the data in three ways: 1. as raw JSON data, 2. as parsed data and 3. as 3D data 
+* The elevation of every airport is scaled to its actual height
 
 ## Road Map
+This app is an experiment in location places acording to latitude, longitude and altitude. R1 has a projection error. R2 will fix.
+
+This app was built just for fun. It plays with the issue of how do you show thousands of things. In this instance the airports become ground cover.
+
 
 
 ## Issues /Bugs
 
+* Not happy about crossing International Date Line
+* Latitudes outside of the top row of tiles have a projection error and are elongated
 
 ## Project Links
 
