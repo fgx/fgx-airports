@@ -120,6 +120,7 @@
 
 		place = selPlace.children[ selPlace.selectedIndex ];
 
+//
 		xTile = lon2tile( place.lon, zoom );
 		yTile = lat2tile( place.lat, zoom );
 
@@ -265,6 +266,7 @@
 
 	function requestFile( fname ) {
 		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.crossOrigin = "Anonymous"; 
 		xmlHttp.open( 'GET', fname, false );
 		xmlHttp.send( null );
 		return xmlHttp.responseText;
