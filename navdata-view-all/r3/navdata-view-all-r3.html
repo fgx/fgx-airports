@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en>
 <head>
-<title>NavData View All R3</title>
+<title>NavData View All R3.1</title>
 <meta charset=utf-8>
 <meta name=author content='Theo Armour'>
 </head>
@@ -11,9 +11,9 @@
 <script>
 
 	var startPlace =  1624; // San Francisco ~ but see below  // barcelona 154;
-	var zoom = 7;
+	var zoom = 12;
 	var tileWidth = 1024; // units per tile
-	var tilesPerSide = 2;  // number of tiles in X and Y
+	var tilesPerSide = 5;  // number of tiles in X and Y
 
 	var renderer, scene, camera, controls;
 	var txtLeft, txtRight, terrain;
@@ -34,11 +34,11 @@
 		document.body.style.cssText = ' font: bold 12pt monospace; ';
 
 		var info = document.body.appendChild( document.createElement( 'div' ) );
-		info.innerHTML = '<h1 style=margin:0;display:inline; >NavData View All R3 - ' +
+		info.innerHTML = '<h1 style=margin:0;display:inline; >NavData View All R3.1 - ' +
 			'<a style=text-decoration:none; href=# title="Get help and info" onclick=help.style.display="block"; ><large>&#x24D8;</large></a></h1>' +
 			'<scan>' +
 				' &nbsp; Zoom: &nbsp;  <input title="0 to 18: OK" id=setZoom type=number min=0 max=18 step=1 value=' + zoom + 
-					' onchange=zoom=this.value;initMap(); > - ' +
+					' onchange=zoom=parseInt(this.value,10);initMap(); > - ' +
 					'<select id=selPlace ></select> ' +
 			'</scan>' +
 		'<br>';;
@@ -47,14 +47,7 @@
 		help.style.cssText = 'display: none; background-color: #ccc; left: 50px; opacity: 0.9; padding: 20px; ' +
 			'position: absolute; top: 50px; width: 500px; zIndex:10; ';
 		help.innerHTML =  '<div onclick=help.style.display="none"; >' +
-				'<b>FGx NavData View All R3</b><br><br>' +
-				'<p>Supports simple permalinks. Examples</p>' +
-
-				'<p>General Controls:<br>' +
-					'&bull; Rotate map: Left mouse / press 1 finger<br>' +
-					'&bull; Zoom in current level: Mousewheel / two fingers<br>' +
-					'&bull; Drag map: Right mouse / press 2 fingers<br>' +
-				'</p>' +
+				'<b>FGx NavData View All R3.1</b><br><br>' +
 
 				'<a href="https://fgx.github.com/fgx-airports/navdata-view-all/" target="_blank">Source code</a><br>' +
 				'<small>credits: <a href="http://threejs.org" target="_blank">three.js</a> - ' +
@@ -91,7 +84,7 @@
 		scene = new THREE.Scene();
 
 		camera = new THREE.PerspectiveCamera( 40, 0.45 * window.innerWidth / ( 0.9 * window.innerHeight) , 1, 20000 );
-		camera.position.set( 500, 500, 500 );
+		camera.position.set( 3500, 3500, 3500 );
 		controls = new THREE.TrackballControls( camera, renderer.domElement );
 
 		THREE.ImageUtils.crossOrigin = 'anonymous';
@@ -118,8 +111,8 @@
 		var geometry, material, mesh, texture;
 		geometry = new THREE.PlaneGeometry( tileWidth, tileWidth );
 		geometry.applyMatrix( new THREE.Matrix4().makeRotationX( -pi05 ) );
-		var start = 0;
-		offset = -0.5 * tileWidth * tilesPerSide;
+		var start =  Math.floor(  0.5 * tilesPerSide );
+		offset =  -0.5 * tileWidth * tilesPerSide;
 
 		for (var i = 0; i < tilesPerSide; i++) {
 			for ( var j = 0; j < tilesPerSide; j++ ) {
@@ -131,7 +124,7 @@
 				terrain.add( mesh );
 
 				mesh = getTileNavData( xTile + i - start, yTile + j - start ); 
-				mesh.position.set( i * tileWidth , 0, j * tileWidth + offset );
+				mesh.position.set( i * tileWidth + offset + tileWidth, 0, j * tileWidth + offset );
 				terrain.add( mesh );
 			}
 		}
@@ -182,6 +175,8 @@
 
 		for (var i = 0, len = airports.length; i < len; i++) {
 			ap = airports[i];
+			if ( zoom < 10 && ap.ntype === 'fix' ) { break; } 
+			if ( zoom < 8 && ap.ntype !== 'apt' ) { break; } 
 			if ( ulLat > ap.lat && ap.lat > lrLat && ulLon < ap.lon && ap.lon < lrLon ) {
 				if ( ap.elev_m < 1 ) { 
 					ap.elev_m = -100;
@@ -220,11 +215,14 @@
 	}
 
 	function drawSprite( text, color, x, y, z) {
+		var distance = camera.position.distanceTo( controls.target );
+		var scale = 0.0005 * distance;
+// console.log( distance, scale );
 		texture = canvasText( text, color )
 		var spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, opacity: 1 } );
 		var sprite = new THREE.Sprite( spriteMaterial );
 		sprite.position.set( x, y, z ) ;
-		sprite.scale.set( texture.image.width, texture.image.height );
+		sprite.scale.set( scale * texture.image.width, scale * texture.image.height );
 		return sprite;
 	}
 
@@ -248,13 +246,14 @@
 	}
 
 	function canvasText( text, color ) {
+
 		var canvas = document.createElement( 'canvas' );
 
 		var context = canvas.getContext( '2d' );
 		context.font = '18px sans-serif';
 		var width = context.measureText( text );
 
-		canvas.width = ( width.width + 10) ; // 480
+		canvas.width = ( width.width + 10 ) ; // 480
 		canvas.height = 20;
 
 		context.fillStyle = color;
