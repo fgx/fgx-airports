@@ -7,7 +7,7 @@ There is an `iframe` here. It is not visible when viewed on github.com/fgx. To v
 </iframe>
 [FGX NavData View All]( http://fgx.github.io/fgx-airports/navdata-view-all/latest/index.html )
 
-* Current latest: R3
+* Current latest: R3 ~ 2014-02-22
 * Adds selecting data via the NavData bounding box feature
 * Add some interesting user experience / data viz features
 
@@ -54,6 +54,11 @@ This app is at an early and volatile stage. Not all licensing requirements may h
 
 
 ## Change Log
+
+2014-02-22 ~ Theo
+
+* R3 Add use of the NavData bounding box featue. Slipped in very easily
+* R2 Big move into working tile by tile rather than on a window of X x Y tiles. Seems to simplify things greatly.
 
 2014-02-21 ~ Theo
 

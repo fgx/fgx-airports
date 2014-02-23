@@ -17,11 +17,15 @@
 	<a href=JavaScript:displayPage("fsm-viewer/readme.md",fsm); >FSM Viewer Read Me</a>
 </p>
 
-<!--
-<p id=def >
-	<a href=JavaScript:displayPage("test-folder-def/readme.md",def); >test-folder-def Read Me</a>
+<hr>
+
+<p>
+	See also:<br>
+	<a href=http://jaanga.github.io/fgx-plane-spotter/ >FGx Plane Spotter</a><br>
+	<a href=http://jaanga.github.io/terrain-viewer/ >Jaanga Terrain Viewer</a><br>
+	<a href=http://jaanga.github.io/terrain/ >Jaanga Terrain</a>
 </p>
--->
+
 
 ****
 

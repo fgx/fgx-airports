@@ -12,8 +12,8 @@
 
 	var startPlace =  1624; // San Francisco ~ but see below  // barcelona 154;
 	var zoom = 7;
-	var tileWidth = 1024;
-	var tilesPerSide = 2;
+	var tileWidth = 1024; // units per tile
+	var tilesPerSide = 2;  // number of tiles in X and Y
 
 	var renderer, scene, camera, controls;
 	var txtLeft, txtRight, terrain;
@@ -56,7 +56,7 @@
 					'&bull; Drag map: Right mouse / press 2 fingers<br>' +
 				'</p>' +
 
-				'<a href="https://fgx.github.com/fgx-airports/navdata-viewer/" target="_blank">Source code</a><br>' +
+				'<a href="https://fgx.github.com/fgx-airports/navdata-view-all/" target="_blank">Source code</a><br>' +
 				'<small>credits: <a href="http://threejs.org" target="_blank">three.js</a> - ' +
 				'<a href="http://khronos.org/webgl/" target="_blank">webgl</a> - ' +
 				'<a href="http://fgx.github.io" target="_blank">jaanga</a><br>' +
