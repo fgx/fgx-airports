@@ -15,14 +15,13 @@ There is an `iframe` here. It is not visible when viewed on github.com/fgx. To v
 ## Concept
 To show as many things in 3D as possible all at once and still have the data for each thing instantly available 
 
-Currently, the demo is really quite ugly. Prettiness is not an objective here. Neither is accuracy. 
-
+Currently, the demo is really quite ugly. Prettiness is not an objective here. Neither is accuracy.
 Data is not formatted in any way. The text records, as of this writing, are probably synced with incorrect graphics. These are not the issues of import here and now. 
 
 What this demo is about: This is a proof of concept for three things:
 
 1. You can load a good number of megabytes - perhaps twenty or so - with hundreds of thousands of data points - all within a time limit acceptable to most users.
-Data that formerly needed to be accessed via a database - may now be accessed as static files.
+Data that formerly needed to be accessed via a database - may now be accessed from static files.
 
 2. Huge amounts of data can be viewed graphically in 3D with real-time zoo, pand and rotate all at 60 frames per seconds
 
@@ -58,6 +57,21 @@ You have two ways of viewing the FGx files:
 * Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-/ "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
 
 FGx home page: [fgx.ch]( http://www.fgx.ch )
+
+
+## Credits
+
+Ideas from:
+
+* http://threejs.org/examples/#webgl_buffergeometry_particles
+* http://threejs.org/examples/#webgl_nearestneighbour
+
+
+This one too could be of help. Just noticed it:
+
+* http://threejs.org/examples/#webgl_interactive_buffergeometry
+
+
 
 ## Copyright Notice and License
 

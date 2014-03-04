@@ -4,6 +4,8 @@ FGx Airports Read Me
 
 Live demos  
 
+[Airports Cookbook]( http://fgx.github.io/fgx-airports/cookbook/readme-reader.html )
+
 <iframe src="http://fgx.github.io/fgx-airports/navdata-view-all/latest/" width=100% height=500px class='overview' >
 There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
 </iframe>  
