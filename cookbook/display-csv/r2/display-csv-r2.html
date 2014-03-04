@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang=en>
+<head>
+<title></title>
+<meta charset=utf-8>
+</head>
+<body>
+<script src = http://mrdoob.github.io/three.js/build/three.min.js ></script>
+<script src = http://mrdoob.github.io/three.js/examples/js/controls/TrackballControls.js ></script>
+<script src = http://mrdoob.github.io/three.js/examples/js/TypedArrayUtils.js></script>
+<script src = http://mrdoob.github.io/three.js/examples/js/libs/stats.min.js ></script>
+<script>
+
+	var pi = Math.PI;
+	var d2r = pi / 180;
+
+	var camera, scene, renderer, stats;
+	var data;
+	var start = new Date();
+	var objects = [];
+
+	var amountOfParticles = 500000, maxDistance = Math.pow(120, 2);
+	var positions, alphas, particles, _particleGeom, colors, positions;
+	var navdata, data, records;
+	var imagePositionsInRange;
+	var nearby;
+	var b = '<br>';
+
+	init();
+	animate();
+
+	function init() {
+
+		document.body.style.cssText = 'font: 600 12pt monospace; margin: 0; overflow: hidden' ;
+
+		info = document.body.appendChild( document.createElement( 'div' ) );
+		info.style.cssText = 'position: absolute; width: 300px; ';
+		info.innerHTML = '<h1>Display CSV 3D</h1>' +
+			'<p id=msg></p>';
+		
+		stats = new Stats();
+		stats.domElement.style.cssText = 'position: absolute; right: 0; top: 0; zIndex: 100; ';
+		document.body.appendChild( stats.domElement );
+
+		renderer = new THREE.WebGLRenderer( { alpha: 1, antialias: true, clearColor: 0xffffff }  );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+		scene = new THREE.Scene();
+
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.position.set( 1000, 1000, 1000 );
+		controls = new THREE.TrackballControls( camera, renderer.domElement );
+
+// geoffmcl.github.io/map-test2/tree/gh-pages/data2/apt1000-ils.csv
+		navdata = { 
+			heli: { name: "heli", src: "apt1000-heli.csv", color: 0x000000, id: 1 },
+			icao: { name: 'icao', src: 'apt1000-icao.csv', color: 0xff0000, id: 8  },
+			ils: { name: 'ils', src: 'apt1000-ils.csv', color: 0x00ff00, id: 3 },
+			nav: { name: 'nav', src: 'apt1000-nav.csv', color: 0xff00ff, id: 4 },
+			sea: { name: 'sea', src: 'apt1000-sea.csv', color: 0x00ffff, id: 5 },
+			clean: { name: 'clean', src: 'clean-nav.csv', color: 0xffff00, id: 6 },
+			awy: { name: 'awy', src: 'xp-awy.csv', color: 0x0000ff, id: 2 },
+			fixes: { name: 'fixes', src: 'xp-fixes.csv', color: 0xff9900, id: 7 }
+		};
+
+		data = [];
+		records = [];
+		var file, length, id, sep = ',';
+		for (var key in navdata) {
+console.log( navdata[ key ].src  );
+			text = requestFile( '../../../csv-data/' + navdata[ key ].src );
+			lines = text.split(/\r\n|\n/);
+			length = lines.length - 1;
+			for ( var j = 0; j < length; j++ ) {
+				line = lines[j].split( sep );
+				id = navdata[ key ].id;
+				if ( id === 7 ) {
+					data.push( [ parseFloat( line[0]) , parseFloat( line[1] ), 0, id, navdata[ key ].color ] );
+				} else if ( id === 4 || id  === 6 ) {
+					data.push( [ parseFloat( line[1]) , parseFloat( line[2] ), 0, id, navdata[ key ].color ] );
+				} else {
+					data.push( [ parseFloat( line[2]) , parseFloat( line[3] ), 10 * Math.log( line[6] ), id, navdata[ key ].color ] );
+				}
+			}
+			records = records.concat( lines );
+		} 
+
+		var distanceFunction = function(a, b){
+			return Math.pow(a[0] - b[0], 2) +  Math.pow(a[1] - b[1], 2) +  Math.pow(a[2] - b[2], 2);
+		};
+
+		var particles = data.length;
+		var geometry = new THREE.BufferGeometry();
+		geometry.addAttribute( 'position', Float32Array, particles, 3 );
+		geometry.addAttribute( 'color', Float32Array, particles, 3 );
+
+		positions = geometry.attributes.position.array;
+		colors = geometry.attributes.color.array;
+
+		var color = new THREE.Color();
+		var j = 0, p, pt;
+
+		for ( var i = 0, len = positions.length; i < len; i += 3 ) {
+			p = data[j++];
+			pt = convertPosition( parseFloat( p[0]), parseFloat( p[1] ), p[2] + p[3] * 100 );
+
+			positions[ i ] = pt.x;
+			positions[ i + 1 ] = pt.y;
+			positions[ i + 2 ] = pt.z;
+
+			color.setHex( p[4] );
+
+			colors[ i ] = color.r;
+			colors[ i + 1 ] = color.g;
+			colors[ i + 2 ] = color.b;
+		}
+
+		geometry.computeBoundingSphere();
+		var material = new THREE.ParticleSystemMaterial( { size: 10, vertexColors: true } );
+		particleSystem = new THREE.ParticleSystem( geometry, material );
+		
+		// creating the kdtree takes a lot of time to execute, in turn the nearest neighbour search will be much faster
+		kdtree = new THREE.TypedArrayUtils.Kdtree( positions, distanceFunction, 3 );
+
+		scene.add( particleSystem );
+
+		console.log( 'time', new Date() - start );
+	}
+
+	function convertPosition( lat, lon, radius ) {
+		var rc = radius * Math.cos( lat * d2r );
+		return new THREE.Vector3( rc * Math.cos( lon * d2r ), radius * Math.sin( lat * d2r ), rc * Math.sin( lon * d2r) );
+	}
+
+	function displayNearest( position ) {
+		nearby = '';
+		// take the nearest 200 around him. distance^2 'cause we use the manhattan distance and no square is applied in the distance function
+		imagePositionsInRange = kdtree.nearest([position.x, position.y, position.z], 100, maxDistance);
+						
+		// We combine the nearest neighbour with a view frustum. Doesn't make sense if we change the sprites not in our view... well maybe it does. Whatever you want.
+		var _frustum = new THREE.Frustum();
+		var _projScreenMatrix = new THREE.Matrix4();
+		camera.matrixWorldInverse.getInverse( camera.matrixWorld );
+
+		_projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
+		_frustum.setFromMatrix( _projScreenMatrix );
+		
+		for ( i = 0, il = imagePositionsInRange.length; i < il; i ++ ) {
+			var object = imagePositionsInRange[i];
+			var objectPoint = new THREE.Vector3(0,0,0);
+			objectPoint.x = object[0].obj[0];
+			objectPoint.y = object[0].obj[1];
+			objectPoint.z = object[0].obj[2];
+			
+			if (_frustum.containsPoint( objectPoint )){
+
+				var objectIndex = object[0].pos;
+				nearby += records[ objectIndex ] + b;
+
+//console.log( records[ objectIndex ], imagePositionsInRange.length );
+
+// not working ;-(
+				// set the color
+				particleSystem.geometry.attributes.color[ objectIndex ] = 8;
+				particleSystem.geometry.attributes.color[ objectIndex + 1] = 8;
+				particleSystem.geometry.attributes.color[ objectIndex + 2] = 8;
+				// update the attribute
+				particleSystem.geometry.attributes.color.needsUpdate = true;
+			}
+		}
+		msg.innerHTML = nearby;
+	}
+
+	function animate() {
+		requestAnimationFrame( animate );
+		displayNearest( camera.position );
+		controls.update();
+		renderer.render( scene, camera );
+		stats.update();
+
+	}
+
+	function requestFile( fname ) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.crossOrigin = "Anonymous"; 
+		xmlHttp.open( 'GET', fname, false );
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+</script>
+</body>
+</html>

@@ -40,7 +40,7 @@
 		var files = ['apt1000-heli.csv','apt1000-icao.csv','apt1000-ils.csv','apt1000-nav.csv','apt1000-sea.csv','clean-nav.csv','xp-awy.csv','xp-fixes.csv'];
 		data = [];
 		for (var i = 0, len = files.length; i < len; i++) {
-			var file = requestFile( files[i] );
+			var file = requestFile( '../../../csv-data/' + files[i] );
 			var lines = file.split(/\r\n|\n/);
 			var length = lines.length - 1;
 			var sep = ',';
