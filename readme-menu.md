@@ -5,6 +5,10 @@
 	<a href=JavaScript:displayPage("readme.md",rm); >Airports Read Me</a>
 </p>
 
+<p id=cb >
+	<a href=JavaScript:displayPage("cookbook/readme.md",cb); >Cookbook Read Me</a>
+</p>
+
 <p id=va >
 	<a href=JavaScript:displayPage("navdata-view-all/readme.md",va); >NavData View All Read Me</a>
 </p>
