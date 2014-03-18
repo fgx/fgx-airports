@@ -3,24 +3,24 @@ Read Me
 
 ### Live Demo
 
-xxx xxx
-<iframe src="http://fgx.github.io/index.html" width=100% height=500px class='overview' >
-There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
-</iframe>
-
+[Display Mag R1](  http://fgx.github.io/fgx-airports/cookbook/display-mag/latest/index.html)
 
 
 ## Concept
-
+Display the declination of the magnetism of the earth of its entire surface at a variety of alitudes
 
 ## Features
+Displays well over the surface of the globe
+Display well the diffs over the altitudes
 
 
 ## Road Map
-
+Some invent some kind of augmented physics such that the changes in relative declination over time are visible to the human eye and perceptible by the brain. 
 
 ## Issues /Bugs
-
+Very slow because demo uses 3D boxes as the pointers.  
+Need to use particles instead
+Also do not erase and redraw each frme 
 
 ## Project Links
 
@@ -40,6 +40,9 @@ This app is at an early and volatile stage. Not all licensing requirements may h
 
 ## Change Log
 
+2014-03-18 ~ Theo
+
+* R1 added
 
 
 
