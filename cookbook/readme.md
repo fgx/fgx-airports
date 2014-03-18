@@ -1,24 +1,24 @@
 Airports Cookbook Read Me
 =========================
 
+[Display Mag]( http://fgx.github.io/fgx-airports/cookbook/display-mag/index.html )
+
+* Display the declination of the magnetism of the earth of its entire surface at a variety of alitudes
+
+
 [Display CSV]( http://fgx.github.io/fgx-airports/cookbook/display-csv/index.html )
 
 * Show Geoff's data in 3D and 2D. At the same time. All of it. Fast.
 
 
-<!--
-### Live Demo
-
-xxx xxx
-<iframe src="http://fgx.github.io/index.html" width=100% height=500px class='overview' >
-There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
-</iframe>
-
-
 
 ## Concept
 
+* Little apps built to demo particular aspects of a larger projects
+* Not always meaningful outside of their contect
+* But may include some interesting code
 
+<!--
 ## Features
 
 
@@ -46,6 +46,10 @@ This app is at an early and volatile stage. Not all licensing requirements may h
 
 
 ## Change Log
+
+2014-03-18 ~ Theo
+
+* Display Mag added
 
 2014-03-02 ~ Theo
 

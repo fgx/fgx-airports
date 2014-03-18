@@ -7,27 +7,43 @@ Read Me
 
 
 ## Concept
-Display the declination of the magnetism of the earth of its entire surface at a variety of alitudes
+Display the declination of the earth's magnetic field in 3D over its entire surface at a variety of alitudes
 
 ## Features
-Displays well over the surface of the globe
-Display well the diffs over the altitudes
-
+Displays the declination at every ten degree of latitude and longitude over the surface of the globe - 576 locations  
+Displays declination at each location at five different altitudes  
+Displays the differences in the declination in time in tenths of years at lowest level only
 
 ## Road Map
-Some invent some kind of augmented physics such that the changes in relative declination over time are visible to the human eye and perceptible by the brain. 
+Currently to movements are too slight for the human eye to see.  
+Need to invent some kind of augmented physics such that the changes in relative declination over time are visible to the human eye and perceptible by the brain. 
 
 ## Issues /Bugs
-Very slow because demo uses 3D boxes as the pointers.  
-Need to use particles instead
-Also do not erase and redraw each frme 
+Very slow because demo uses Three.js 3D boxes as the pointers  
+Should use use Three.js particles instead    
+Also should not erase and redraw each frame, but merely carry out updates  
+The latter id nor a timple task. Require monitoring the diffs between to 4x4 matrices   
 
 ## Project Links
 
-You have two ways of viewing the FGx files:
+See also:
 
-* Code hosted on GitHub: [fgx.github.io]( http://fgx.github.io/fgx-/ "view the files as apps." ) <input value="<< You are now probably here." size=28 style="font:bold 12pt monospace;border-width:0;" >  
-* Source code on GitHub: [github.com/fgx]( https://github.com/fgx/fgx-/ "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
+Geoff McLane's [WMM - World Magnetic Model]( http://geoffair.org/fg/map-test2/wmm-test.html )
+
+Nationa; Geophysical Data Center  
+
+* [Magnetic Field Calculators]( http://www.ngdc.noaa.gov/geomag-web/#declination )
+* [The World Magnetic Model and Associated Software]( http://www.ngdc.noaa.gov/geomag/WMM/soft.shtml )
+
+WNN JavaScript rotine from
+
+* [Libraries and Web Services for Outdoor Pursuits Mashups]( http://www.bdcc.co.uk/Gmaps/Services.htm] )
+* http://www.bdcc.co.uk/Gmaps/WorldMagneticModel.js 
+
+You have two ways of viewing the Display Mag files:
+
+* Web pages hosted on GitHub: [fgx.github.io/fgx-airports/cookbook/display-mag]( http://fgx.github.io/fgx-airports/cookbook/display-mag/readme-reader.html "View the files as apps." ) <input value="<< You are now probably here." size=28 style="font:bold 12pt monospace;border-width:0;" >  
+* Source code on GitHub: [github.com/fgx/fgx-airports/ ... /cookbook/display-mag/]( https://github.com/fgx/fgx-airports/tree/gh-pages/cookbook/display-mag "View the files as source code." ) <scan style=display:none ><< You are now probably here.</scan>
 
 FGx home page: [fgx.ch]( http://www.fgx.ch )
 
