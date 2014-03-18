@@ -55,10 +55,8 @@
 		scene.add( new THREE.ArrowHelper( v(0, 1, 0), v(0, 0, 0), 30, 0x00cc00) );
 		scene.add( new THREE.ArrowHelper( v(0, 0, 1), v(0, 0, 0), 30, 0x0000cc) );
 
+		var geometry, material, mesh, dec;
 
-
-// ground plane
-		var geometry, material, mesh;
 		geometry = new THREE.SphereGeometry( 10, 10, 10 );
 		material = new THREE.MeshNormalMaterial();
 		mesh = new THREE.Mesh( geometry, material );
@@ -75,7 +73,7 @@
 	function setHeading( layer, date, altitude, color ) {
 		scene.remove( layer );
 		layer = new THREE.Object3D();
-		var material = new THREE.MeshBasicMaterial( { color: color } );
+		material = new THREE.MeshBasicMaterial( { color: color } );
 		for ( var lon = -180; lon < 180; lon += 10 ) {
 			for (var lat = -80; lat < 80; lat += 10 ) {
 				geometry = new THREE.CubeGeometry( 1, 20, 1 );
@@ -89,18 +87,6 @@
 		}
 		scene.add( layer );
 		msg.innerHTML = date.toFixed(2);
-	}
-
-	function updateHeading( date ) {
-		var dec, index = 0;
-		for ( var lon = -180; lon < 180; lon += 10 ) {
-			for (var lat = -80; lat < 80; lat += 10 ) {
-				dec = wmm.declination( 0.0, lat, lon, date); 
-				p = pointers.children[ index++]; 
-				p.rotation.z +=  p.rotation.z  - dec * d2r; 
-			}
-		} 
-		msg.innerHTML = date.toFixed(2) + ' - ' + dec.toFixed(3);
 	}
 
 	function convertPosition( lat, lon, radius ) {
@@ -127,7 +113,6 @@
 //			setHeading( layer4, date, 4000, 0x0000ff );
 			delta = 0;
 		}
-
 	}
 </script>
 </body>

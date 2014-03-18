@@ -5,9 +5,10 @@ Read Me
 
 [Display Mag R1](  http://fgx.github.io/fgx-airports/cookbook/display-mag/latest/index.html)
 
+* Careful: this is currently a browser resource hog
 
 ## Concept
-Display the declination of the earth's magnetic field in 3D over its entire surface at a variety of alitudes
+Display the declination of the earth's magnetic field in 3D over its entire surface at a variety of altitudes
 
 ## Features
 Displays the declination at every ten degree of latitude and longitude over the surface of the globe - 576 locations  
@@ -22,7 +23,7 @@ Need to invent some kind of augmented physics such that the changes in relative 
 Very slow because demo uses Three.js 3D boxes as the pointers  
 Should use use Three.js particles instead    
 Also should not erase and redraw each frame, but merely carry out updates  
-The latter id nor a timple task. Require monitoring the diffs between to 4x4 matrices   
+The latter is not a simple task. Requires monitoring the diffs between to 4x4 matrices   
 
 ## Project Links
 
@@ -30,12 +31,12 @@ See also:
 
 Geoff McLane's [WMM - World Magnetic Model]( http://geoffair.org/fg/map-test2/wmm-test.html )
 
-Nationa; Geophysical Data Center  
+National; Geophysical Data Center  
 
 * [Magnetic Field Calculators]( http://www.ngdc.noaa.gov/geomag-web/#declination )
 * [The World Magnetic Model and Associated Software]( http://www.ngdc.noaa.gov/geomag/WMM/soft.shtml )
 
-WNN JavaScript rotine from
+WMM JavaScript routine from
 
 * [Libraries and Web Services for Outdoor Pursuits Mashups]( http://www.bdcc.co.uk/Gmaps/Services.htm] )
 * http://www.bdcc.co.uk/Gmaps/WorldMagneticModel.js 
