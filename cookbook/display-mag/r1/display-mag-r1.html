@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang=en >
+<head>
+<title></title>
+<meta charset=utf-8 >
+</head>
+<body>
+<script src=http://mrdoob.github.io/three.js/build/three.min.js ></script>
+<script src=http://mrdoob.github.io/three.js/examples/js/controls/TrackballControls.js ></script>
+<script src=http://mrdoob.github.io/three.js/examples/js/libs/stats.min.js ></script>
+<script src=../WorldMagneticModel.js ></script>
+<script>
+	var wmm = new WorldMagneticModel();
+	var date = 2010.0;
+
+	var layer0 = new THREE.Object3D();
+	var layer1 = new THREE.Object3D();
+	var layer2 = new THREE.Object3D();
+	var layer3 = new THREE.Object3D();
+	var layer4 = new THREE.Object3D();
+
+	var info, renderer, scene, camera, controls, stats;
+	var pi = Math.PI;
+	var d2r = pi / 180;
+
+	var clock = new THREE.Clock();
+	var delta = 0;
+
+	init();
+	animate();
+
+	function init() {
+		document.body.style.cssText = 'font: 600 12pt monospace; margin: 0; overflow: hidden' ;
+
+		info = document.body.appendChild( document.createElement( 'div' ) );
+		info.style.cssText = 'left: 20px; position: absolute; top: 0px; width: 100% ';
+		info.innerHTML = '<h1>Display Mag<h1>' +
+		'<div id=msg ></div>';
+
+		stats = new Stats();
+		stats.domElement.style.cssText = 'position: absolute; right: 0; top: 0; zIndex: 100; ';
+		document.body.appendChild( stats.domElement );
+
+		renderer = new THREE.WebGLRenderer( { alpha: 1, antialias: true, clearColor: 0xffffff }  );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+		scene = new THREE.Scene();
+
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
+		camera.position.set( 500, 500, 500 );
+		controls = new THREE.TrackballControls( camera, renderer.domElement );
+
+// axes
+		scene.add( new THREE.ArrowHelper( v(1, 0, 0), v(0, 0, 0), 30, 0xcc0000) );
+		scene.add( new THREE.ArrowHelper( v(0, 1, 0), v(0, 0, 0), 30, 0x00cc00) );
+		scene.add( new THREE.ArrowHelper( v(0, 0, 1), v(0, 0, 0), 30, 0x0000cc) );
+
+		var geometry, material, mesh, dec;
+
+		geometry = new THREE.SphereGeometry( 10, 10, 10 );
+		material = new THREE.MeshNormalMaterial();
+		mesh = new THREE.Mesh( geometry, material );
+		mesh.position.set( 0, 0, 0 );
+		scene.add( mesh );
+
+		setHeading( layer0, 2010.0, 0.0, 0xff0000 );
+		setHeading( layer1, 2010.0, 1000, 0xff8800 );
+		setHeading( layer2, 2010.0, 2000, 0xffff00 );
+		setHeading( layer3, 2010.0, 3000, 0x00ff00 );
+		setHeading( layer4, 2010.0, 4000, 0x0000ff );
+	}
+
+	function setHeading( layer, date, altitude, color ) {
+		scene.remove( layer );
+		layer = new THREE.Object3D();
+		material = new THREE.MeshBasicMaterial( { color: color } );
+		for ( var lon = -180, dec; lon < 180; lon += 15 ) {
+			for (var lat = -80; lat < 80; lat += 15 ) {
+				geometry = new THREE.BoxGeometry( 2, 40, 2 );
+				dec = wmm.declination( altitude, lat, lon, 2014.5); 
+				geometry.applyMatrix( new THREE.Matrix4().makeRotationZ( dec * d2r ) );
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.position = convertPosition( lat, lon, 200 + 0.02 * altitude );
+				mesh.lookAt( v( 0, 0, 0) );
+				layer.add( mesh );
+			}
+		}
+		scene.add( layer );
+		msg.innerHTML = date.toFixed(2);
+	}
+
+	function convertPosition( lat, lon, radius ) {
+		var rc = radius * Math.cos( lat * d2r );
+		return v( rc * Math.cos( lon * d2r ), radius * Math.sin( lat * d2r ), rc * Math.sin( lon * d2r) );
+	}
+
+	function v( x, y, z ){ return new THREE.Vector3( x, y, z ); }
+
+	function animate() {
+		requestAnimationFrame( animate );
+		controls.update();
+		renderer.render( scene, camera );
+		stats.update();
+
+		delta += clock.getDelta();
+		if ( delta > 1 ) {
+			date += 0.1;
+			if ( date >= 2015 ) date = 2010;
+			setHeading( layer0, date, 0.0, 0xff0000 );
+//			setHeading( layer1, date, 1000, 0xff8800 );
+//			setHeading( layer2, date, 2000, 0xffff00 );
+//			setHeading( layer3, date, 3000, 0x00ff00 );
+//			setHeading( layer4, date, 4000, 0x0000ff );
+			delta = 0;
+		}
+
+	}
+</script>
+</body>
+</html>
