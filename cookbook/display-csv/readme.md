@@ -3,14 +3,11 @@ Display CSV Read Me
 
 ### Live Demo
 
-Display CSV
-<iframe src="http://fgx.github.io/fgx-airports/cookbook/display-csv/latest/index.html" width=100% height=500px class='overview' >
-There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io. See 'Project Links' just below.
-</iframe>
-
 [ Display CSV R2 ]( http://fgx.github.io/fgx-airports/cookbook/display-csv/latest/index.html )
 
 * Zoom in close to objects to view the ASCII data for the object
+
+[ Display CSV R1 ]( http://fgx.github.io/fgx-airports/cookbook/display-csv/r1/display-csv.html )
 
 ## Concept
 To show as many things in 3D as possible all at once and still have the data for each thing instantly available 
